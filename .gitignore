@@ -1,0 +1,41 @@
+# Fichiers système
+__pycache__/
+*.pyc
+
+# Fichiers de configuration Flask
+instance/
+
+# Fichiers de dépendances Python
+venv/
+.venv/
+*.env
+*.log
+
+# Fichiers de base de données
+db.sqlite
+*.db
+
+# Fichiers de migration SQLAlchemy
+migrations/
+
+# Fichiers générés lors de l'exécution
+*.pyc
+*.pyo
+*.pyd
+*.pyz
+*.pyw
+__pycache__/
+
+# Fichiers de sauvegarde
+*~
+*.bak
+*.swp
+*.swo
+
+# Fichiers de journalisation
+*.log
+logs/
+
+# Fichiers de configuration spécifiques à l'utilisateur
+.DS_Store
+Thumbs.db
