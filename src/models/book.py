@@ -72,3 +72,22 @@ class BookCopy(db.Model):
     
     def __repr__(self) :
         return f"book : {self.book_id} status {self.status}"
+
+users_favorites_books = db.Table(
+    'users_favorites_books',
+    db.Column('favorite_id', db.Integer, db.ForeignKey('favorite.id'), primary_key=True),
+    db.Column('book_id', db.Integer, db.ForeignKey('book.id'), primary_key=True)
+)
+
+class Favorite(db.Model):
+    __tablename__ = "favorite"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    
+    books = db.relationship('Book', secondary=users_favorites_books, backref=db.backref('favorites', lazy=True))
+
+    
+    def __repr__(self):
+        return f"Favorite(user_id={self.user_id})"
+

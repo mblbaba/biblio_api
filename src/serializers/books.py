@@ -30,6 +30,9 @@ def serialize_books(books):
 
 
 def serialize_book(book):
+    categories = []
+    for category in book.categories:
+        categories.append(category.name)
     serialized_book = {
         "id" : book.id,
         "name" : book.name,
@@ -43,7 +46,7 @@ def serialize_book(book):
         "added_date" : book.added_date,
         "loans_count" : book.loans_count,
         "banner" : book.banner,
-        "categories" : book.categories,
+        "categories" : categories,
         "tags" : book.tags,
         "rate_count" : book.rate_count,
         "created_by_id" : book.created_by_id

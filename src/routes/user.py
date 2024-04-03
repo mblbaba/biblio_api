@@ -1,4 +1,6 @@
 from flask import jsonify, make_response, request
+from src.serializers.books import serialize_books
+from src.models.book import Book, Favorite
 from src.models.user import User
 from src.serializers.users import serialize_user, serialize_users
 from utils import get_missing_par, get_unkown_params, make_response_if_unknown_params_or_missing_params
@@ -29,7 +31,6 @@ def register_users_route(app, db):
         )
         db.session.add(user)
         db.session.commit()
-        print(user)
         response = {
             "success" : 1,
             "message" : "User added successfully",
@@ -92,3 +93,47 @@ def register_users_route(app, db):
             "data" : serialize_user(user)
         }
         return make_response(response, 200)
+    
+    @app.route('/users/<int:id>/favorites', methods = ['GET'])
+    def get_user_favorites_books(id):
+        user = User.query.get(id)
+        print(user)
+        if not user:
+            response = {
+                "success" : -1,
+                "message" : "User not found",
+                "data" : {}
+            }
+            return make_response(response, 404)
+        favorites = Favorite.query.filter(Favorite.user_id == id).first()
+        print(favorites)
+        books = favorites.books
+        serialized_books = serialize_books(books)
+        return serialized_books
+    
+    @app.route('/users/<int:id>/favorite/add', methods=['POST'])
+    def add_user_favorite(id):
+        params = ["books_ids"]
+        data = request.get_json()
+        
+        err = make_response_if_unknown_params_or_missing_params(params, data)
+        if err:
+            return err
+        
+        books_ids = data.get('books_ids', [])
+        
+        books = Book.query.filter(Book.id.in_(books_ids)).all()
+        
+        for book in books:
+            print(book.id)
+        favorite = Favorite(user_id=id)
+        favorite.books.extend(books)
+        
+        db.session.add(favorite)
+        db.session.commit()
+        return "ok"
+
+        
+        
+        
+        

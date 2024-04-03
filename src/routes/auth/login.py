@@ -1,6 +1,8 @@
 import datetime
 from flask import jsonify, make_response, request
-import jwt
+from flask_jwt_extended import create_access_token
+
+
 
 from src.models.user import User
 from src.serializers.users import serialize_user
@@ -17,9 +19,8 @@ def register_login_route(app, db):
             return err
         user = User.query.filter_by(username = data['username']).first()
         if user and user.password == data['password']:
-            algorithm="HS256"
-            
-            token = jwt.encode({'user_id': user.id}, key="lamottelymouhamed", algorithm=algorithm)
+            # algorithm="HS256"
+            token = create_access_token({"user_id": user.id}, expires_delta=datetime.timedelta(days=1))
             
             response = {
                 "success" : 1,

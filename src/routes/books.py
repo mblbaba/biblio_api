@@ -1,5 +1,7 @@
 from flask import make_response, request
 
+from src.routes.auth.security.login_required import login_required
+from src.routes.auth.security.api_required import api_required
 from src.models.book import Book, Category
 from src.serializers.books import serialize_book, serialize_books
 from src.serializers.only_name import serialize_only_name, serialize_only_names
@@ -13,10 +15,14 @@ def resgiter_books_route(app, db):
         return serialized_books
     
     @app.route("/books/add", methods = ['POST'])
+    # @api_required
+    # @login_required
     def add_book():
         data = request.get_json()
         params = ["name", "author", "release_date", "editor", "language", "genre", "resume", "page_number", "loans_count", "banner", "categories", "tags", "rate_count", "created_by_id"]
-        make_response_if_unknown_params_or_missing_params(params, data)
+        err = make_response_if_unknown_params_or_missing_params(params, data)
+        if err :
+            return err
         category_ids = data.get('categories', [])
 
         categories = Category.query.filter(Category.id.in_(category_ids)).all()
@@ -122,3 +128,21 @@ def resgiter_books_route(app, db):
     def categories():
         categories = Category.query.all()
         return serialize_only_names(categories)
+    
+    @app.route("/books/search", methods = ['GET'])
+    def seach_books():
+        query = request.args.get('q', None)
+        category = request.args.get('category', None)
+        
+        if not query:
+            return "Please enter a query"
+        if not category:
+            books = Book.query.filter(Book.name.contains(query)).all()
+            serialized_book = serialize_books(books)
+            return serialized_book
+        
+        books = Book.query.filter(Book.name.contains(query), Book.categories.any(Category.name == category)).all()
+        
+        serialized_book = serialize_books(books)
+        
+        return serialized_book
