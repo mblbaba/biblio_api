@@ -11,7 +11,7 @@ const books = [
       "loans_count": 25,
       "banner": "/assets/images/books/1.webp",
       "rate_count": 345,
-      "created_by_id": 123,
+      "created_by_id": 1,
       "categories": [1, 3],
       "tags": ["Social Issues", "Legal Drama"]
     },
@@ -27,7 +27,7 @@ const books = [
       "loans_count": 30,
       "banner": "/assets/images/books/2.png",
       "rate_count": 289,
-      "created_by_id": 124,
+      "created_by_id": 1,
       "categories": [2, 5],
       "tags": ["Totalitarianism", "Surveillance"]
     },
@@ -43,7 +43,7 @@ const books = [
       "loans_count": 20,
       "banner": "/assets/images/books/3.jpg",
       "rate_count": 412,
-      "created_by_id": 125,
+      "created_by_id": 1,
       "categories": [1, 5],
       "tags": ["Regency Era", "Social Commentary"]
     },
@@ -59,7 +59,7 @@ const books = [
       "loans_count": 15,
       "banner": "/assets/images/books/4.jpg",
       "rate_count": 372,
-      "created_by_id": 126,
+      "created_by_id": 1,
       "categories": [1, 7],
       "tags": ["Jazz Age", "American Dream"]
     },
@@ -75,7 +75,7 @@ const books = [
       "loans_count": 50,
       "banner": "/assets/images/books/5.jpg",
       "rate_count": 520,
-      "created_by_id": 127,
+      "created_by_id": 1,
       "categories": [1, 2],
       "tags": ["Magic", "Coming of Age"]
     },
@@ -91,7 +91,7 @@ const books = [
       "loans_count": 18,
       "banner": "/assets/images/books/6.jpg",
       "rate_count": 298,
-      "created_by_id": 128,
+      "created_by_id": 1,
       "categories": [1, 4],
       "tags": [8, "Teenage Angst"]
     },
@@ -107,7 +107,7 @@ const books = [
       "loans_count": 40,
       "banner": "/assets/images/books/7.jpg",
       "rate_count": 480,
-      "created_by_id": 129,
+      "created_by_id": 1,
       "categories": [1, 7],
       "tags": [2, "Quest"]
     },
@@ -123,7 +123,7 @@ const books = [
       "loans_count": 35,
       "banner": "/assets/images/books/8.jpg",
       "rate_count": 390,
-      "created_by_id": 130,
+      "created_by_id": 1,
       "categories": [1, 9],
       "tags": [2, "Quest"]
     },
@@ -139,7 +139,7 @@ const books = [
       "loans_count": 12,
       "banner": "/assets/images/books/9.jpg",
       "rate_count": 255,
-      "created_by_id": 131,
+      "created_by_id": 1,
       "categories": [1, 2],
       "tags": ["Whaling", "Obsession"]
     },
@@ -155,7 +155,7 @@ const books = [
       "loans_count": 10,
       "banner": "/assets/images/books/10.jpeg",
       "rate_count": 200,
-      "created_by_id": 132,
+      "created_by_id": 1,
       "categories": [7, 5],
       "tags": ["Mythology", "Hero's Journey"]
     },
@@ -171,7 +171,7 @@ const books = [
         "loans_count": 22,
         "banner" : "/assets/images/books/11.jpg",
         "rate_count": 320,
-        "created_by_id": 133,
+        "created_by_id": 1,
         "categories": ["Fiction", "Satire"],
         "tags": ["Chivalry", "Madness"]
       },
@@ -187,7 +187,7 @@ const books = [
         "loans_count": 28,
         "banner" : "/assets/images/books/12.jpg",
         "rate_count": 410,
-        "created_by_id": 134,
+        "created_by_id": 1,
         "categories": ["Fiction", "Historical Novel"],
         "tags": ["Napoleonic Wars", "Russian Society"]
       },
@@ -203,7 +203,7 @@ const books = [
         "loans_count": 18,
         "banner" : "/assets/images/books/13.png",
         "rate_count": 365,
-        "created_by_id": 135,
+        "created_by_id": 1,
         "categories": ["Fiction", "Psychological Novel"],
         "tags": ["Guilt", "Redemption"]
       },
@@ -219,7 +219,7 @@ const books = [
         "loans_count": 15,
         "banner" : "/assets/images/books/14.jpg",
         "rate_count": 290,
-        "created_by_id": 136,
+        "created_by_id": 1,
         "categories": ["Fiction", "Philosophical Fiction"],
         "tags": ["Family Drama", "Religious Themes"]
       },
@@ -235,7 +235,7 @@ const books = [
         "loans_count": 35,
         "banner" : "/assets/images/books/15.jpg",
         "rate_count": 480,
-        "created_by_id": 137,
+        "created_by_id": 1,
         "categories": ["Fiction", "Historical Fiction"],
         "tags": ["Redemption", "French Revolution"]
       },
@@ -251,7 +251,7 @@ const books = [
         "loans_count": 20,
         "banner" : "/assets/images/books/16.jpg",
         "rate_count": 360,
-        "created_by_id": 138,
+        "created_by_id": 1,
         "categories": ["Fiction", "Gothic Literature"],
         "tags": ["Aestheticism", "Moral Decay"]
       },
@@ -267,7 +267,7 @@ const books = [
         "loans_count": 25,
         "banner" : "/assets/images/books/17.jpg",
         "rate_count": 400,
-        "created_by_id": 139,
+        "created_by_id": 1,
         "categories": ["Fiction", "Magical Realism"],
         "tags": ["Latin American Literature", "Family Saga"]
       },
@@ -283,7 +283,7 @@ const books = [
         "loans_count": 30,
         "banner" : "/assets/images/books/18.webp",
         "rate_count": 450,
-        "created_by_id": 140,
+        "created_by_id": 1,
         "categories": ["Fiction", "Realist Fiction"],
         "tags": ["Adultery", "Russian Society"]
       },
@@ -299,7 +299,7 @@ const books = [
         "loans_count": 15,
         "banner" : "/assets/images/books/19.jpg",
         "rate_count": 320,
-        "created_by_id": 141,
+        "created_by_id": 1,
         "categories": ["Poetry", "Epic Poetry"],
         "tags": ["Allegory", "Christian Theology"]
       },
@@ -315,7 +315,7 @@ const books = [
         "loans_count": 25,
         "banner" : "/assets/images/books/20.jpg",
         "rate_count": 380,
-        "created_by_id": 142,
+        "created_by_id": 1,
         "categories": ["Fiction", "Gothic Literature"],
         "tags": ["Science Fiction", "Morality"]
       }

@@ -12,6 +12,9 @@ def resgiter_books_route(app, db):
     def books():
         books = Book.query.all()
         serialized_books = serialize_books(books)
+        limit = request.args.get('limit')
+        if limit and limit.isdigit():
+            serialized_books = serialized_books[:int(limit)]
         return serialized_books
     
     @app.route("/books/add", methods = ['POST'])
