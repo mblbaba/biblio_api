@@ -53,6 +53,7 @@ class Book(db.Model):
     rate_count = db.Column(db.Integer, default = 0, nullable = True)
     galeries = db.Column(db.String(255), nullable=True)
     created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = True)
+    copy_stock = db.Column(db.Integer, default = 0, nullable = True)
     
     categories = db.relationship('Category', secondary=book_categories, backref=db.backref('books', lazy=True))
     tags = db.relationship('Tag', secondary=book_tags, backref=db.backref('books', lazy=True))

@@ -1,3 +1,6 @@
+from src.models.book import Book
+
+
 def serialize_books(books):
     serialized_books = []
     for book in books:
@@ -23,7 +26,8 @@ def serialize_books(books):
             "categories" : categories,
             "tags" : tags,
             "rate_count" : book.rate_count,
-            "created_by_id" : book.created_by_id
+            "created_by_id" : book.created_by_id,
+            "copy_stock" : book.copy_stock
         }
         serialized_books.append(serialize_book)
     return serialized_books
@@ -49,6 +53,29 @@ def serialize_book(book):
         "categories" : categories,
         "tags" : book.tags,
         "rate_count" : book.rate_count,
-        "created_by_id" : book.created_by_id
+        "created_by_id" : book.created_by_id,
+        "copy_stock" : book.copy_stock
     }
     return serialized_book
+
+
+def serialize_book_copy(book_copy, book = None):
+    book = serialize_book(book)
+    serialized_book_copy = {
+        "id" : book_copy.id,
+        "book" : book,
+        "status" : book_copy.status,
+        "available" : book_copy.available,
+        "book_id" : book_copy.book_id
+    }
+    return serialized_book_copy
+
+
+
+def serialize_book_copies(books):
+    serialized_books = []
+    for copy in books:
+        book = Book.query.get(copy.book_id)
+        serialized_book = serialize_book_copy(copy, book)
+        serialized_books.append(serialized_book)
+    return serialized_books

@@ -43,6 +43,7 @@ def create_app():
     from src.routes.books import resgiter_books_route
     from src.routes.auth.login import register_login_route
     from src.routes.auth.device import register_device_route
+    from src.routes.loans import register_loans_route
     
     
     
@@ -58,6 +59,7 @@ def create_app():
     
     register_login_route(app, db)
     register_device_route(app, db)
+    register_loans_route(app, db)
     
     migrate = Migrate(app, db)
     

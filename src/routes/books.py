@@ -2,8 +2,8 @@ from flask import make_response, request
 
 from src.routes.auth.security.login_required import login_required
 from src.routes.auth.security.api_required import api_required
-from src.models.book import Book, Category
-from src.serializers.books import serialize_book, serialize_books
+from src.models.book import Book, BookCopy, Category
+from src.serializers.books import serialize_book, serialize_book_copies, serialize_book_copy, serialize_books
 from src.serializers.only_name import serialize_only_name, serialize_only_names
 from utils import make_response_if_not_instance_of_model, make_response_if_unknown_params_or_missing_params
 
@@ -22,7 +22,7 @@ def resgiter_books_route(app, db):
     # @login_required
     def add_book():
         data = request.get_json()
-        params = ["name", "author", "release_date", "editor", "language", "genre", "resume", "page_number", "loans_count", "banner", "categories", "tags", "rate_count", "created_by_id"]
+        params = ["name", "author", "release_date", "editor", "language", "genre", "resume", "page_number", "loans_count", "banner", "categories", "tags", "rate_count", "created_by_id", "copy_stock"]
         err = make_response_if_unknown_params_or_missing_params(params, data)
         if err :
             return err
@@ -149,3 +149,95 @@ def resgiter_books_route(app, db):
         serialized_book = serialize_books(books)
         
         return serialized_book
+    
+    
+    @app.route("/books/copies", methods = ['GET'])
+    def books_copies():
+        try :
+            books = BookCopy.query.all()
+            serialized_books = serialize_book_copies(books)
+            return serialized_books
+        except Exception as e:
+            print(e)
+            response = {}
+            return make_response(response, 500)
+    
+    @app.route("/books/<int:id>/copies", methods = ['GET'])
+    def get_book_copies(id):
+        try :
+            book_copies = BookCopy.query.filter(BookCopy.book_id == id).all()
+            serialized_book_copies = serialize_book_copies(book_copies)
+            return serialized_book_copies
+        except Exception as e:
+            print(e)
+            response = {}
+            return make_response(response, 500)
+    
+        
+    @app.route("/books/<int:id>/copy/add", methods=['POST'])
+    def add_book_copy(id):
+        try :
+            book = Book.query.get(id)
+            if not book:
+                response = {
+                    "success": -1,
+                    "message": "Book not found",
+                    "data": {}
+                }
+                return make_response(response, 404)
+
+            # Créer une nouvelle copie du livre
+            book_copy = BookCopy(
+                book_id=book.id,
+                status="available",
+                available=True,
+                created_by_id=book.created_by_id
+            )
+            db.session.add(book_copy)
+
+            if book.copy_stock is None: book.copy_stock = 1
+            else: book.copy_stock = book.copy_stock + 1
+            
+            db.session.commit()
+
+            serialized_book_copy = serialize_book_copy(book_copy, book)
+
+            response = {
+                "success": 1,
+                "message": "Book copy added successfully",
+                "data": serialized_book_copy
+            }
+            return make_response(response, 200)
+        except Exception as e:
+            print(e)
+            response = {
+                "success": -1,
+                "message": "Something went wrong",
+                "data": {}
+            }
+            return make_response(response, 500)
+    @app.route("/books/<int:id>/copy/delete", methods=['DELETE'])
+    def delete_book_copy(id):
+        book = Book.query.get(id)
+        copy = BookCopy.query.filter(BookCopy.book_id == id).first()
+        if not copy:
+            response = {
+                "success": -1,
+                "message": "Book does not exist or has no copies",
+                "data": {}
+            }
+            return make_response(response, 404)
+        db.session.delete(copy)
+        if book.copy_stock is None: book.copy_stock = 0
+        else: book.copy_stock = book.copy_stock - 1
+        db.session.commit()
+        response = {
+            "success": 1,
+            "message": "Book copy deleted successfully",
+            "data": {
+                "book": serialize_book(book)
+            }
+        }
+        return make_response(response, 200)
+
+
