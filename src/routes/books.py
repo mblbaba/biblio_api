@@ -1,5 +1,6 @@
 from flask import make_response, request
 
+from src.models.loan import Loan
 from src.routes.auth.security.login_required import login_required
 from src.routes.auth.security.api_required import api_required
 from src.models.book import Book, BookCopy, Category
@@ -8,10 +9,28 @@ from src.serializers.only_name import serialize_only_name, serialize_only_names
 from utils import make_response_if_not_instance_of_model, make_response_if_unknown_params_or_missing_params
 
 def resgiter_books_route(app, db):
+    
+    
+    
+    
     @app.route('/books', methods = ['GET'])
     def books():
+        is_book_on_user_loans = False
+        uid = request.args.get("uid", None)
         books = Book.query.all()
-        serialized_books = serialize_books(books)
+        if uid != None and uid.isdigit():
+            for book in books :
+                try :
+                    loned_book = Loan.query.filter(Loan.book_id == book.id, Loan.user_id == uid).first()
+                    if (loned_book) : 
+                       is_book_on_user_loans = True
+                       break
+                except Exception as e :
+                    print("une erreur s'est produite")
+        else:
+            print("not uid")
+        print(is_book_on_user_loans)
+        serialized_books = serialize_books(books, is_book_on_user_loans)
         limit = request.args.get('limit')
         if limit and limit.isdigit():
             serialized_books = serialized_books[:int(limit)]

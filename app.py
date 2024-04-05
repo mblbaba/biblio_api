@@ -51,7 +51,14 @@ def create_app():
     
     
     
-     
+    @app.route("/")
+    def enpoints():
+        enpoints = {
+            "users" : "/users",
+            "books" : "/books",
+            "auth" : "/auth/login"
+        }
+        return enpoints
         
     register_users_route(app, db)
     resgiter_books_route(app, db)

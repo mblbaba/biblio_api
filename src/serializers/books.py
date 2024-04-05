@@ -1,7 +1,7 @@
 from src.models.book import Book
 
 
-def serialize_books(books):
+def serialize_books(books, is_book_on_user_loans = False):
     serialized_books = []
     for book in books:
         categories = []
@@ -12,6 +12,7 @@ def serialize_books(books):
             tags.append(tag.name)
         serialize_book = {
             "id" : book.id,
+            "is_book_on_user_loans" : is_book_on_user_loans,
             "name" : book.name,
             "author" : book.author,
             "release_date" : book.release_date,
@@ -33,7 +34,7 @@ def serialize_books(books):
     return serialized_books
 
 
-def serialize_book(book):
+def serialize_book(book, is_book_on_user_loans = False):
     categories = []
     for category in book.categories:
         categories.append(category.name)
@@ -54,7 +55,8 @@ def serialize_book(book):
         "tags" : book.tags,
         "rate_count" : book.rate_count,
         "created_by_id" : book.created_by_id,
-        "copy_stock" : book.copy_stock
+        "copy_stock" : book.copy_stock,
+        "is_book_on_user_loans" : is_book_on_user_loans
     }
     return serialized_book
 
