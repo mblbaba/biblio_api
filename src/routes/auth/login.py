@@ -19,8 +19,9 @@ def register_login_route(app, db):
             return err
         user = User.query.filter_by(username = data['username']).first()
         if user and user.password == data['password']:
+            serialized_user = serialize_user(user)
             # algorithm="HS256"
-            token = create_access_token({"user_id": user.id}, expires_delta=datetime.timedelta(days=1))
+            token = create_access_token({"user_id": user.id, "user":serialized_user}, expires_delta=datetime.timedelta(days=1))
             
             response = {
                 "success" : 1,
