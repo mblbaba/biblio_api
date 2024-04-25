@@ -26,12 +26,12 @@ def create_app():
     CORS(app, supports_credentials=True)
     
     
-    app.config['JWT_SECRET_KEY'] = 'your_secret_key_here'
+    app.config['JWT_SECRET_KEY'] = 'nkvfdtfyvgubhinjomlkjhgfdsavb'
 
     app.config['JWT_TOKEN_LOCATION'] = ['headers', 'cookies']
 
     jwt = JWTManager(app)
-    app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:oPrvxGiCRxUSXPqWZciCzOFWrqKPryBk@viaduct.proxy.rlwy.net:45724/railway"
+    app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:AahOMEolMmDIWZJFnBKoCUVshEIKNxmS@viaduct.proxy.rlwy.net:36054/railway"
     # app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db.sqlite"
     
 

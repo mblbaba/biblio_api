@@ -23,6 +23,7 @@ def register_login_route(app, db):
             # algorithm="HS256"
             token = create_access_token({"user_id": user.id, "user":serialized_user}, expires_delta=datetime.timedelta(days=1))
             
+        
             response = {
                 "success" : 1,
                 "message" : "User logged in successfully",

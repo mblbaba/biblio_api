@@ -1,3 +1,4 @@
+import random
 from flask import make_response, request
 
 from src.models.loan import Loan
@@ -11,13 +12,24 @@ from utils import make_response_if_not_instance_of_model, make_response_if_unkno
 def resgiter_books_route(app, db):
     
     
-    
-    
     @app.route('/books', methods = ['GET'])
     def books():
         is_book_on_user_loans = False
         uid = request.args.get("uid", None)
-        books = Book.query.all()
+        limit = request.args.get('limit')
+        categori_id = request.args.get('categori_id')
+        if limit and limit.isdigit() and categori_id and categori_id.isdigit():
+            print('limit and categories')
+            books = Book.query.filter(Book.categories.any(Category.id == categori_id)).limit(int(limit)).all()
+        elif limit and limit.isdigit():
+            print('limit only')
+            books = Book.query.limit(int(limit)).all()
+        elif categori_id and categori_id.isdigit():
+            print('categories only')
+            
+            books = Book.query.filter(Book.categories.any(Category.id == categori_id)).all()
+        else :
+            books = Book.query.all()
         if uid != None and uid.isdigit():
             for book in books :
                 try :
@@ -31,23 +43,26 @@ def resgiter_books_route(app, db):
             print("not uid")
         print(is_book_on_user_loans)
         serialized_books = serialize_books(books, is_book_on_user_loans)
-        limit = request.args.get('limit')
-        if limit and limit.isdigit():
-            serialized_books = serialized_books[:int(limit)]
         return serialized_books
     
     @app.route("/books/add", methods = ['POST'])
     # @api_required
     # @login_required
     def add_book():
+        
         data = request.get_json()
-        params = ["name", "author", "release_date", "editor", "language", "genre", "resume", "page_number", "loans_count", "banner", "categories", "tags", "rate_count", "created_by_id", "copy_stock"]
+        # print(data)
+        params = ["name", "author", "release_date", "editor", "language", "genre", "resume", "page_number", "loans_count", "banner", "rate_count", "created_by_id"]
         err = make_response_if_unknown_params_or_missing_params(params, data)
         if err :
+            print(err)
             return err
-        category_ids = data.get('categories', [])
-
-        categories = Category.query.filter(Category.id.in_(category_ids)).all()
+        # category_ids = data.get('categories', [])
+        
+        list_category = [i for i in range(1, 40)]
+        
+        randoms_categories_ids = [random.choice(list_category) for _ in range(5)]
+        categories = Category.query.filter(Category.id.in_(randoms_categories_ids)).all()
 
         book = Book(
             name=data['name'],
@@ -55,7 +70,7 @@ def resgiter_books_route(app, db):
             release_date=data['release_date'],
             editor=data['editor'],
             language=data['language'],
-            genre=data['genre'],
+            genre="",
             resume=data['resume'],
             page_number=data['page_number'],
             loans_count=data['loans_count'],
@@ -66,7 +81,6 @@ def resgiter_books_route(app, db):
         book.categories.extend(categories)
         db.session.add(book)
         db.session.commit()
-        
         response = {
             "success" : 1,
             "message" : "Book added successfully",
@@ -88,6 +102,19 @@ def resgiter_books_route(app, db):
         response = {
             "success" : 1,
             "message" : "Book deleted successfully",
+            "data" : {}
+        }
+        return make_response(response, 200)
+    
+    @app.route("/books/delete", methods = ['DELETE'])
+    def delete_books():
+        books = Book.query.all()
+        for book in books:
+            db.session.delete(book)
+        db.session.commit()
+        response = {
+            "success" : 1,
+            "message" : "Books deleted successfully",
             "data" : {}
         }
         return make_response(response, 200)
@@ -127,12 +154,13 @@ def resgiter_books_route(app, db):
     
     @app.route("/categories/add", methods = ['POST'])
     def add_category():
-        params=["name", "created_by_id"]
+        params=["name", "created_by_id", "id"]
         data = request.get_json()
         err = make_response_if_unknown_params_or_missing_params(params, data)
         if err:
             return err
         category = Category(
+            id = data['id'],
             name = data['name'],
             created_by_id = data['created_by_id']
         )
@@ -159,7 +187,7 @@ def resgiter_books_route(app, db):
         if not query:
             return "Please enter a query"
         if not category:
-            books = Book.query.filter(Book.name.contains(query)).all()
+            books = Book.query.filter(Book.name.contains(query.lower())).all()
             serialized_book = serialize_books(books)
             return serialized_book
         

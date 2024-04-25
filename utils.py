@@ -27,6 +27,7 @@ def make_response_if_unknown_params_or_missing_params(params, data):
             "data" : {}
             
         }
+        print(response)
         return make_response(response, 400)
     
     if unkn_params :
@@ -36,6 +37,7 @@ def make_response_if_unknown_params_or_missing_params(params, data):
             "data" : {}
             
         }
+        print(response)
         return make_response(response, 400)
     
     
