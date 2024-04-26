@@ -31,8 +31,8 @@ def create_app():
     app.config['JWT_TOKEN_LOCATION'] = ['headers', 'cookies']
 
     jwt = JWTManager(app)
-    app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:AahOMEolMmDIWZJFnBKoCUVshEIKNxmS@viaduct.proxy.rlwy.net:36054/railway"
-    # app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db.sqlite"
+    # app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:AahOMEolMmDIWZJFnBKoCUVshEIKNxmS@viaduct.proxy.rlwy.net:36054/railway"
+    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db.sqlite"
     
 
     
