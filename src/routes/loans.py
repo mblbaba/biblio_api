@@ -10,7 +10,11 @@ def register_loans_route(app, db):
     @app.route("/loans", methods = ['GET'])
     def loans():
         try :
-            loans = Loan.query.all()
+            limit = request.args.get('limit', None)
+            if limit and limit.isdigit():
+                loans = Loan.query.limit(int(limit)).all()
+            else:
+                loans = Loan.query.all()
             serialized_loans = serialize_loans(loans)
             return serialized_loans
         except Exception as e:
@@ -94,9 +98,10 @@ def register_loans_route(app, db):
         
     @app.route("/loans/<int:loan_id>/manage", methods = ['POST'])
     def manage_loan(loan_id):
+        d =[]
         loan = Loan.query.get(loan_id)
         action = request.args.get('action', None)
-        actions = ["confirm", "cancel", "return"]
+        actions = ["confirm", "cancel", "return", "delete"]
         if not action:
             response = {
                 "success": -1,
@@ -117,13 +122,18 @@ def register_loans_route(app, db):
         print(copybook)
         if action == "cancel" or action == "return":
             copybook.available = True
+            d = serialize_loan(loan)
+        elif action == "delete":
+            db.session.delete(loan)
         else:
             copybook.available = False
+            d = serialize_loan(loan)
+        
         db.session.commit()
         response = {
             "success": 1,
-            "message": "Loan confirmed successfully",
-            "data": serialize_loan(loan)
+            "message": f"Loan {action}ed successfully",
+            "data": d
         }
         return make_response(response, 200)
     
