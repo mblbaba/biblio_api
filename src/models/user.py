@@ -1,3 +1,4 @@
+from sqlalchemy import func
 from app import db
 
 class User(db.Model):
@@ -16,3 +17,13 @@ class User(db.Model):
     
     def __repr__(self):
         return f"user : {self.username} email {self.email} "
+    
+class Notification(db.Model):
+    __tablename__ = "notification"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    icon = db.Column(db.Text, nullable=True)
+    message = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    read = db.Column(db.Boolean, nullable=False, default=False)

@@ -27,5 +27,23 @@ def serialize_user(user):
         }
     return serialized_user
 
+def serialize_notification(notification):
+    serialized_notification = {
+            'id': notification.id,
+            'icon': notification.icon,
+            'message': notification.message,
+            'created_at': notification.created_at,
+            'read': notification.read,
+            'user_id': notification.user_id
+    }
+    return serialized_notification
+
+def serialize_notifications(notifications):
+    serialized_notifications = []
+    for notification in notifications:
+        serialized_notification = serialize_notification(notification)
+        serialized_notifications.append(serialized_notification)
+    return serialized_notifications
+
 
     

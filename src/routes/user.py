@@ -1,8 +1,8 @@
 from flask import jsonify, make_response, request
 from src.serializers.books import serialize_books
 from src.models.book import Book, Favorite
-from src.models.user import User
-from src.serializers.users import serialize_user, serialize_users
+from src.models.user import Notification, User
+from src.serializers.users import serialize_notifications, serialize_user, serialize_users
 from utils import get_missing_par, get_unkown_params, make_response_if_unknown_params_or_missing_params
 
 
@@ -132,8 +132,67 @@ def register_users_route(app, db):
         db.session.add(favorite)
         db.session.commit()
         return "ok"
+    @app.route("/users/notifications", methods = ['GET'])
+    def get_notifications():
+        notifications = Notification.query.all()
+        serialized_notifications = serialize_notifications(notifications)
+        return serialized_notifications
+    
+    @app.route('/users/<int:id>/notifications', methods = ['GET'])
+    def notifications(id):
+        try :
+           notifications = Notification.query.filter(Notification.user_id == id).all()
+           serialized_notifications = serialize_notifications(notifications)
+           return serialized_notifications
+        except Exception:
+           response = {
+            "success" : -1,
+            "message" : "Une erreur est survenue",
+            "data" : {}
+        }
+           return make_response(response, 500)
+       
+    @app.route('/users/<int:id>/notification/<int:notification_id>', methods=['DELETE'])
+    def delete_notification(id, notification_id):
+        try:
+            notification = Notification.query.get(notification_id)
+            db.session.delete(notification)
+            db.session.commit()
+            response = {
+                "success" : 1,
+                "message" : "Notification deleted successfully",
+                "data" : {}
+            }
+            return make_response(response, 200)
+        except Exception as e:
+            response = {
+                "success" : -1,
+                "message" : "Notification not found",
+                "data" : {}
+            }
+            print(e)
+            return make_response(response, 404)
 
-        
-        
-        
+    
+    @app.route('/users/<int:id>/notifications', methods=['DELETE'])
+    def delete_notifications(id):
+        try:
+            notifications = Notification.query.filter(Notification.user_id == id).all()
+            for notification in notifications:
+                db.session.delete(notification)
+            db.session.commit()
+            response = {
+                "success" : 1,
+                "message" : "Notifications deleted successfully",
+                "data" : {}
+            }
+            return make_response(response, 200)
+        except Exception as e:
+            response = {
+                "success" : -1,
+                "message" : "Notifications not found",
+                "data" : {}
+            }
+            print(e)
+            return make_response(response, 404)
         

@@ -1,4 +1,5 @@
 from flask import make_response, request
+from src.models.user import Notification
 from src.models.book import BookCopy
 from src.serializers.loans import serialize_loan, serialize_loans
 from src.models.loan import Loan
@@ -98,6 +99,7 @@ def register_loans_route(app, db):
         
     @app.route("/loans/<int:loan_id>/manage", methods = ['POST'])
     def manage_loan(loan_id):
+        icon = "mdi:bell"
         d =[]
         loan = Loan.query.get(loan_id)
         action = request.args.get('action', None)
@@ -123,12 +125,25 @@ def register_loans_route(app, db):
         if action == "cancel" or action == "return":
             copybook.available = True
             d = serialize_loan(loan)
+            icon = "ph:key-return-fill"
+            
         elif action == "delete":
+            d = serialize_loan(loan)
             db.session.delete(loan)
+            icon = "ic:baseline-delete"
+            
         else:
             copybook.available = False
             d = serialize_loan(loan)
         
+
+        new_notif = Notification(
+                user_id = loan.user_id,
+                icon = icon,
+                message = f"Your loan on {d.get('book_copy').get('book').get('name')} has been {action}ed",
+            )
+        print("new notif", new_notif)
+        db.session.add(new_notif)
         db.session.commit()
         response = {
             "success": 1,
